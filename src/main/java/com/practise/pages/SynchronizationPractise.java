@@ -4,20 +4,28 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import javax.swing.plaf.TableHeaderUI;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SynchronizationPractise {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        WebDriver driver = new ChromeDriver();
-        WebDriverWait w= new WebDriverWait(driver, Duration.ofSeconds(5));
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--incognito");
+
+        WebDriver driver = new ChromeDriver(options);
+        WebDriverWait w= new WebDriverWait(driver, Duration.ofSeconds(8));
         driver.get("https://rahulshettyacademy.com/loginpagePractise/");
         driver.findElement(By.cssSelector("#username")).sendKeys("rahulshettyacademy");
         driver.findElement(By.cssSelector("#password")).sendKeys("Learning@830$3mK2");
@@ -35,21 +43,31 @@ public class SynchronizationPractise {
         driver.findElement(By.cssSelector("#terms")).click();
         driver.findElement(By.id("signInBtn")).click();
 
-        List<WebElement> cards = w.until(
+//        List<WebElement> addButtons = w.until(
+//                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+//                        By.cssSelector("button.btn-info")
+//                )
+//        );
+//
+//        for (WebElement button : addButtons) {
+//            button.click();
+//            Thread.sleep(1000);
+//        }
 
-                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+        List <WebElement> products = driver.findElements(By.cssSelector(".card-footer .btn-info"));
 
-                        By.xpath("//div[@class='card-body']")
+        for(int i =0;i<products.size();i++)
 
-                )
-
-        );
-
-        for (WebElement card : cards) {
-
-            System.out.println(card.getText());
+        {
+            System.out.println(products.get(i));
+            products.get(i).click();
 
         }
+
+        Thread.sleep(4000);
+        driver.findElement(By.partialLinkText("Checkout")).click();
+        w.until(ExpectedConditions.visibilityOfElementLocated(By.partialLinkText("Checkout")));
+        Thread.sleep(2000);
 
 
 
